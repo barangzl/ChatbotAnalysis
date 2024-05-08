@@ -14,11 +14,11 @@ def analyze_sentiment(text):
     blob = TextBlob(text)
     polarity = blob.sentiment.polarity
     if polarity > 0:
-        return 'Olumlu'
+        return 'Positive'
     elif polarity < 0:
-        return 'Olumsuz'
+        return 'Negative'
     else:
-        return 'Nötr'
+        return 'Neutral'
 
 # Metinlerin Duygusal Skorlarını Hesapla ve flagslare göre ayır
 sentiments = [analyze_sentiment(response) for response in responses]
@@ -26,7 +26,7 @@ sentiments = [analyze_sentiment(response) for response in responses]
 # Sonuçları DataFrame'e ekle
 df['sentiment'] = sentiments
 
-output_file = "sentiment_analysis_results.csv"
+output_file = "sentiment_analysis_results_tb.csv"
 df.to_csv(output_file, index=False) # Yeni dataframe i kayıt et
 
 # Metinlerin Duygusal Skorlarını Hesapla ve flagslere göre ayır
