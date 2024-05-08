@@ -15,24 +15,22 @@ flags     = df['flags'].tolist()
 # Duygu Analizi Modelini Oluştur
 sid = SentimentIntensityAnalyzer()
 
-output_file = "results.txt"
+sentiments = []
 
 
-with open(output_file, "w", encoding="utf-8") as file: # Output doysanını oluştur
-    # Metinlerin Duygusal Skorlarını Hesapla ve flagslare göre ayır
-    for i, (response, flag) in enumerate(zip(responses, flags), start=1):
-        scores = sid.polarity_scores(response)
-        file.write(f"{i}. \"{response}\"\n")
-        file.write("   Duygusal Skorlar: " + str(scores) + "\n")
-        
-        # Skorlar
-        if scores['compound'] >= 0.05:
-            file.write("   Yorum: Olumlu\n")
-        elif scores['compound'] <= -0.009:
-            file.write("   Yorum: Olumsuz\n")
-        else:
-            file.write("   Yorum: Nötr\n")
-        
-        # Flagsler
-        file.write("   Flags: " + str(flag) + "\n")
-        file.write("\n")
+# Metinlerin Duygusal Skorlarını Hesapla ve flagslare göre ayır
+for i, (response, flag) in enumerate(zip(responses, flags), start=1):
+    scores = sid.polarity_scores(response)
+    # Skorlar
+    if scores['compound'] >= 0.01:
+        sentiment = "Positive"
+    elif scores['compound'] <= -0.01:
+        sentiment = "Olumsuz"
+    else:
+        sentiment = "Neutral"
+    sentiments.append(sentiment)
+
+df['sentiment'] = sentiments
+
+output_file = "sentiment_analysis_results_vl.csv"
+df.to_csv(output_file, index=False)
